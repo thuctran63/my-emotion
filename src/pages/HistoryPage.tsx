@@ -174,7 +174,7 @@ export default function HistoryPage() {
                               </span>
                             </span>
                             {e.note ? (
-                              <span className="mt-1 block whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-600 line-clamp-2 dark:text-slate-300">
+                              <span className="mt-1 block truncate text-sm text-slate-600 dark:text-slate-300">
                                 {e.note}
                               </span>
                             ) : (
