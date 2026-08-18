@@ -42,3 +42,124 @@ body {
       transparent 60%
     );
 }
+
+/* --- Emotion picker click effects --- */
+@keyframes emotion-pop {
+  0% {
+    transform: scale(0.55);
+  }
+  55% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes emotion-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+.emotion-pop {
+  animation:
+    emotion-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    emotion-breathe 2.2s ease-in-out 0.45s infinite;
+}
+
+@keyframes emotion-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+}
+.emotion-float {
+  animation: emotion-float 3s ease-in-out infinite;
+}
+
+@keyframes emotion-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 2px var(--glow),
+      0 8px 20px -8px color-mix(in srgb, var(--glow) 40%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px var(--glow),
+      0 12px 28px -6px color-mix(in srgb, var(--glow) 65%, transparent);
+  }
+}
+.emotion-glow {
+  animation: emotion-glow 2s ease-in-out infinite;
+}
+
+@keyframes emotion-ripple {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.emotion-ripple {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid var(--glow);
+  animation: emotion-ripple 0.6s ease-out forwards;
+}
+
+@keyframes emotion-burst {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0.1);
+    opacity: 0;
+  }
+}
+@keyframes emotion-burst-rot {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.1);
+    opacity: 0;
+  }
+}
+.emotion-particle {
+  position: absolute;
+  border-radius: 9999px;
+  animation: emotion-burst 0.6s ease-out forwards;
+}
+.emotion-particle.square {
+  border-radius: 2px;
+  animation-name: emotion-burst-rot;
+}
+.emotion-particle.star {
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  animation-name: emotion-burst-rot;
+}
