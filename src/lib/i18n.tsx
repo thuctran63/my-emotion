@@ -43,6 +43,8 @@ const dict: Dict = {
   hist_confirm_delete: { vi: "Xóa ghi chép ngày này?", en: "Delete this day's entry?" },
   hist_export: { vi: "Xuất JSON", en: "Export JSON" },
   hist_note_empty: { vi: "(không có nhật ký)", en: "(no journal)" },
+  hist_view: { vi: "Xem chi tiết", en: "View details" },
+  hist_close: { vi: "Đóng", en: "Close" },
 
   // Stats page
   stats_title: { vi: "Thống kê", en: "Statistics" },
