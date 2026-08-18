@@ -1,8 +1,28 @@
 {
-    "rewrites": [
+    "builds": [
         {
-            "source": "/((?!api/).*)",
-            "destination": "/index.html"
+            "src": "api/index.ts",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "framework": "vite"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/index.ts"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
         }
     ]
 }
