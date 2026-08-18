@@ -19,13 +19,16 @@ function validateNote(note: unknown): note is string {
   return typeof note === "string" && note.length <= 5000;
 }
 
+// NOTE: routes are registered WITHOUT the /api prefix because Vercel mounts
+// the `api/` directory at /api already (otherwise paths become /api/api/...).
+// The local server re-adds the prefix via app.route("/api", app) — see server/index.ts
 export const app = new Hono();
-app.use("/api/*", cors());
+app.use("/*", cors());
 
-app.get("/api/health", (c) => c.json({ ok: true }));
+app.get("/health", (c) => c.json({ ok: true }));
 
-// GET /api/entries?from=YYYY-MM-DD&to=YYYY-MM-DD → newest first
-app.get("/api/entries", async (c) => {
+// GET /entries?from=YYYY-MM-DD&to=YYYY-MM-DD → newest first
+app.get("/entries", async (c) => {
   const from = c.req.query("from");
   const to = c.req.query("to");
   const q: { date?: { $gte?: string; $lte?: string } } = {};
@@ -37,8 +40,8 @@ app.get("/api/entries", async (c) => {
   );
 });
 
-// POST /api/entries — upsert by date. Body: { date, level, note? }
-app.post("/api/entries", async (c) => {
+// POST /entries — upsert by date. Body: { date, level, note? }
+app.post("/entries", async (c) => {
   const body = await c.req.json().catch(() => null);
   if (!body || typeof body !== "object") return c.json({ error: "invalid_body" }, 400);
   const { date, level, note } = body as { date?: unknown; level?: unknown; note?: unknown };
@@ -61,8 +64,8 @@ app.post("/api/entries", async (c) => {
   return c.json({ ...rest, id: String(_id) });
 });
 
-// PATCH /api/entries/:date — partial update { level?, note? }
-app.patch("/api/entries/:date", async (c) => {
+// PATCH /entries/:date — partial update { level?, note? }
+app.patch("/entries/:date", async (c) => {
   const { date } = c.req.param();
   if (!isValidDate(date)) return c.json({ error: "invalid_date" }, 400);
   const body = await c.req.json().catch(() => null);
@@ -84,8 +87,8 @@ app.patch("/api/entries/:date", async (c) => {
   return c.json({ ...rest, id: String(_id) });
 });
 
-// DELETE /api/entries/:date
-app.delete("/api/entries/:date", async (c) => {
+// DELETE /entries/:date
+app.delete("/entries/:date", async (c) => {
   const { date } = c.req.param();
   if (!isValidDate(date)) return c.json({ error: "invalid_date" }, 400);
   const res = await (await entries()).deleteOne({ date });
