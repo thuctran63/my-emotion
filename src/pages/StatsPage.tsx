@@ -116,35 +116,74 @@ export default function StatsPage() {
           {/* insights */}
           <section className="rounded-3xl border border-slate-200/70 bg-white/70 p-5 dark:border-slate-800 dark:bg-slate-900/60">
             <h2 className="mb-3 text-sm font-bold text-slate-800 dark:text-slate-100">{t("stats_insights")}</h2>
-            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+            <div className="grid grid-cols-2 gap-3">
               {stats.bestMonth !== null && (
-                <li>
-                  {t("stats_best_month", { month: t(`f${stats.bestMonth}`) })}
-                </li>
+                <InsightCard
+                  icon={
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M8 2v4" />
+                      <path d="M16 2v4" />
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <path d="M3 10h18" />
+                    </svg>
+                  }
+                  label={t("stats_insight_month")}
+                  value={t(`f${stats.bestMonth}`)}
+                  tone="indigo"
+                />
               )}
-              <li className="flex items-center gap-2">
-                {stats.trend === "up" && (
-                  <>
-                    <svg className="h-4 w-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
-                    {t("stats_trending_up")}
-                  </>
-                )}
-                {stats.trend === "down" && (
-                  <>
-                    <svg className="h-4 w-4 text-red-600 dark:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-                    {t("stats_trending_down")}
-                  </>
-                )}
-                {stats.trend === "steady" && (
-                  <>
-                    <svg className="h-4 w-4 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg>
-                    {t("stats_steady")}
-                  </>
-                )}
-              </li>
-              {stats.bestStreak > 1 && <li>{t("stats_streak_insight", { n: stats.bestStreak })}</li>}
-              <li>{t("stats_30d_avg", { v: stats.last30Avg.toFixed(1) })}</li>
-            </ul>
+              <InsightCard
+                icon={
+                  stats.trend === "up" ? (
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 17l6-6 4 4 8-8" />
+                      <path d="M14 7h7v7" />
+                    </svg>
+                  ) : stats.trend === "down" ? (
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 7l6 6 4-4 8 8" />
+                      <path d="M14 17h7v-7" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M5 12h14" />
+                    </svg>
+                  )
+                }
+                label={t("stats_insight_trend")}
+                value={
+                  stats.trend === "up"
+                    ? t("stats_trend_up_short")
+                    : stats.trend === "down"
+                      ? t("stats_trend_down_short")
+                      : t("stats_trend_steady_short")
+                }
+                tone={stats.trend === "up" ? "emerald" : stats.trend === "down" ? "rose" : "slate"}
+              />
+              {stats.bestStreak > 1 && (
+                <InsightCard
+                  icon={
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                  }
+                  label={t("stats_insight_streak")}
+                  value={`${stats.bestStreak} ${t("today_days")}`}
+                  tone="amber"
+                />
+              )}
+              <InsightCard
+                icon={
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 3v18h18" />
+                    <path d="M7 14l4-4 3 3 5-6" />
+                  </svg>
+                }
+                label={t("stats_insight_30d")}
+                value={`${stats.last30Avg.toFixed(1)}/5`}
+                tone="sky"
+              />
+            </div>
           </section>
         </div>
       )}
@@ -161,6 +200,28 @@ function StatCard({ label, value, suffix, sub }: { label: string; value: string;
         {suffix && <span className="ml-1 text-xs font-semibold text-slate-400 dark:text-slate-500">{suffix}</span>}
       </p>
       {sub && <p className="text-xs font-medium text-slate-400 dark:text-slate-500">{sub}</p>}
+    </div>
+  );
+}
+
+const TONES: Record<string, { chip: string; icon: string }> = {
+  indigo: { chip: "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400", icon: "text-indigo-500 dark:text-indigo-400" },
+  emerald: { chip: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400", icon: "text-emerald-500 dark:text-emerald-400" },
+  rose: { chip: "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400", icon: "text-rose-500 dark:text-rose-400" },
+  amber: { chip: "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400", icon: "text-amber-500 dark:text-amber-400" },
+  sky: { chip: "bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400", icon: "text-sky-500 dark:text-sky-400" },
+  slate: { chip: "bg-slate-100 text-slate-600 dark:bg-slate-500/10 dark:text-slate-400", icon: "text-slate-500 dark:text-slate-400" },
+};
+
+function InsightCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: string; tone: string }) {
+  const c = TONES[tone] ?? TONES.slate;
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-slate-200/70 bg-white/70 p-3.5 dark:border-slate-800 dark:bg-slate-900/60">
+      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.chip}`}>{icon}</span>
+      <div className="min-w-0">
+        <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+        <p className="truncate text-sm font-bold text-slate-900 dark:text-white">{value}</p>
+      </div>
     </div>
   );
 }
