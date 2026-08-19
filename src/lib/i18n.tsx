@@ -121,6 +121,13 @@ const dict: Dict = {
   f10: { vi: "Tháng 11", en: "November" },
   f11: { vi: "Tháng 12", en: "December" },
 
+  // PIN lock
+  pin_sub: { vi: "Nhập mã PIN để mở khóa", en: "Enter PIN to unlock" },
+  pin_label: { vi: "Mã PIN 6 số", en: "6-digit PIN" },
+  pin_error: { vi: "Sai mã PIN, thử lại", en: "Wrong PIN, try again" },
+  pin_clear: { vi: "Xóa", en: "Clear" },
+  pin_backspace: { vi: "Xóa ký tự cuối", en: "Delete last digit" },
+
   // Status / misc
   status_loading: { vi: "Đang tải…", en: "Loading…" },
   status_error: { vi: "Không thể kết nối máy chủ", en: "Cannot reach server" },
