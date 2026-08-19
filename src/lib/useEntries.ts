@@ -3,19 +3,44 @@ import { api, type Entry } from "./api";
 
 type EntriesMap = Map<string, Entry>;
 
+const CACHE_KEY = "my-emotion:entries";
+
+function loadCache(): EntriesMap {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return new Map();
+    return new Map((JSON.parse(raw) as Entry[]).map((e) => [e.date, e]));
+  } catch {
+    return new Map();
+  }
+}
+
+function persist(entries: EntriesMap) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify([...entries.values()]));
+  } catch {
+    /* storage unavailable — ignore */
+  }
+}
+
 export function useEntries() {
-  const [entries, setEntries] = useState<EntriesMap>(new Map());
-  const [loading, setLoading] = useState(true);
+  const [entries, setEntries] = useState<EntriesMap>(loadCache);
+  // With cached data the UI is interactive immediately; fetch refreshes in background.
+  const [loading, setLoading] = useState(() => entries.size === 0);
   const [error, setError] = useState(false);
   const [loadedRange, setLoadedRange] = useState<{ from?: string; to?: string }>({});
+  const entriesRef = useRef(entries);
+  entriesRef.current = entries;
 
   const refresh = useCallback(async (from?: string, to?: string) => {
     try {
-      setLoading(true);
+      // Only show the loading state when there is nothing on screen yet
+      if (entriesRef.current.size === 0) setLoading(true);
       const list = await api.list(from, to);
       setEntries((prev) => {
         const next = new Map(prev);
         for (const e of list) next.set(e.date, e);
+        persist(next);
         return next;
       });
       setLoadedRange({ from, to });
@@ -33,6 +58,7 @@ export function useEntries() {
       const next = new Map(prev);
       const cur = next.get(date);
       next.set(date, { ...cur, date, ...patch } as Entry);
+      persist(next);
       return next;
     });
   }, []);

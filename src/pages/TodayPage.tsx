@@ -35,6 +35,8 @@ export default function TodayPage() {
       return;
     }
     if (level === 0) return;
+    // Skip when hydrating values that are already saved (no-op POST)
+    if (existing && existing.level === level && (existing.note ?? "") === note) return;
     setSaveState("saving");
     window.clearTimeout(noteTimer.current);
     noteTimer.current = window.setTimeout(async () => {
@@ -44,11 +46,9 @@ export default function TodayPage() {
     return () => window.clearTimeout(noteTimer.current);
   }, [note, level, today, save]);
 
-  const pickLevel = async (lv: number) => {
+  const pickLevel = (lv: number) => {
+    // Just update state — the debounced effect below performs the single save.
     setLevel(lv);
-    setSaveState("saving");
-    const ok = await save(today, lv, note);
-    setSaveState(ok ? "saved" : "error");
   };
 
   const streak = currentStreak(entries.values());
