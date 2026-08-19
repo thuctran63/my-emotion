@@ -86,10 +86,11 @@ export default function TodayPage() {
             id="note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder={t("today_note_ph")}
+            placeholder={level === 0 ? "Chọn cảm xúc trước để ghi nhật ký" : t("today_note_ph")}
             rows={4}
             maxLength={5000}
-            className="w-full resize-y rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm leading-relaxed text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder:text-slate-500"
+            disabled={level === 0}
+            className="w-full resize-y rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm leading-relaxed text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder:text-slate-500 disabled:bg-slate-100 disabled:text-slate-400 dark:disabled:bg-slate-900 dark:disabled:text-slate-600"
           />
           <div className="mt-1.5 flex items-center justify-between text-xs">
             <span
@@ -134,7 +135,7 @@ export default function TodayPage() {
             {t("today_30d")}
           </p>
           {last30.some((d) => entries.has(d)) ? (
-            <div className="flex items-end gap-[3px]" role="img" aria-label={t("today_30d")}>
+            <div className="flex h-24 items-end gap-[3px]" role="img" aria-label={t("today_30d")}>
               {last30.map((d) => {
                 const e = entries.get(d);
                 return (

@@ -64,8 +64,8 @@ const dict: Dict = {
   stats_insights: { vi: "Góc nhìn", en: "Insights" },
   stats_no_data: { vi: "Chưa đủ dữ liệu để thống kê — hãy ghi chép vài ngày nhé!", en: "Not enough data yet — log a few days first!" },
   stats_best_month: { vi: "Tháng vui nhất: {month}", en: "Happiest month: {month}" },
-  stats_trending_up: { vi: "Cảm xúc đang đi lên 📈", en: "Mood is trending up 📈" },
-  stats_trending_down: { vi: "Cảm xúc đang giảm 📉", en: "Mood is trending down 📉" },
+  stats_trending_up: { vi: "Cảm xúc đang đi lên", en: "Mood is trending up" },
+  stats_trending_down: { vi: "Cảm xúc đang giảm", en: "Mood is trending down" },
   stats_steady: { vi: "Cảm xúc khá ổn định", en: "Mood is steady" },
   stats_streak_insight: { vi: "Chuỗi {n} ngày tốt nhất của bạn", en: "Your best streak of {n} days" },
   stats_30d_avg: { vi: "30 ngày: {v}/5", en: "30 days: {v}/5" },
@@ -146,7 +146,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   const t = (k: string, vars?: Record<string, string | number>): string => {
-    const e = dict[k] ?? dict[k] ?? { vi: k, en: k };
+    const e = dict[k] ?? { vi: k, en: k };
     let s = e[lang] ?? e.vi ?? k;
     if (vars) for (const [key, val] of Object.entries(vars)) s = s.replaceAll(`{${key}}`, String(val));
     return s;

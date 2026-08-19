@@ -75,7 +75,7 @@ export default function StatsPage() {
             <StatCard label={t("stats_best_streak")} value={String(stats.bestStreak)} suffix={t("today_days")} />
             <StatCard
               label={t("stats_best_day")}
-              value={stats.bestDay ? stats.bestDay.date.slice(8) : "–"}
+              value={stats.bestDay ? stats.bestDay.date.slice(5) : "–"}
               sub={stats.bestDay ? `${stats.bestDay.level}/5` : undefined}
             />
           </div>
@@ -122,10 +122,25 @@ export default function StatsPage() {
                   {t("stats_best_month", { month: t(`f${stats.bestMonth}`) })}
                 </li>
               )}
-              <li>
-                {stats.trend === "up" && t("stats_trending_up")}
-                {stats.trend === "down" && t("stats_trending_down")}
-                {stats.trend === "steady" && t("stats_steady")}
+              <li className="flex items-center gap-2">
+                {stats.trend === "up" && (
+                  <>
+                    <svg className="h-4 w-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+                    {t("stats_trending_up")}
+                  </>
+                )}
+                {stats.trend === "down" && (
+                  <>
+                    <svg className="h-4 w-4 text-red-600 dark:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                    {t("stats_trending_down")}
+                  </>
+                )}
+                {stats.trend === "steady" && (
+                  <>
+                    <svg className="h-4 w-4 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+                    {t("stats_steady")}
+                  </>
+                )}
               </li>
               {stats.bestStreak > 1 && <li>{t("stats_streak_insight", { n: stats.bestStreak })}</li>}
               <li>{t("stats_30d_avg", { v: stats.last30Avg.toFixed(1) })}</li>
