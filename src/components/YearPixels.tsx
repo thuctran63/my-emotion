@@ -74,7 +74,8 @@ export default function YearPixels({ entries, year }: Props) {
                 fill={color}
                 opacity={day.level === null ? 0.5 : 0.9}
               >
-                <title>{`${day.date}: ${day.level === null ? "—" : `${day.level}/5`}`}</title>
+                {/* title only where there is data — halves SVG node count */}
+                {day.level !== null && <title>{`${day.date}: ${day.level}/5`}</title>}
               </rect>
             );
           })
