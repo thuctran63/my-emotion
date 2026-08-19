@@ -26,12 +26,12 @@ export default function ChartBars({ counts }: Props) {
           ) : null
         )}
       </div>
-      <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 sm:grid-cols-5">
+      <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-5 sm:gap-x-4 sm:gap-y-1.5">
         {counts.map((c, i) => (
-          <li key={i} className="flex items-center gap-2 text-xs">
+          <li key={i} className="flex items-center gap-2 text-xs leading-none">
             <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: LEVEL_COLORS[i] }} aria-hidden="true" />
-            <span className="truncate text-slate-600 dark:text-slate-300">{t(LEVEL_KEYS[i])}</span>
-            <span className="ml-auto font-semibold tabular-nums text-slate-800 dark:text-slate-100">
+            <span className="min-w-0 flex-1 truncate text-slate-600 dark:text-slate-300">{t(LEVEL_KEYS[i])}</span>
+            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 font-semibold tabular-nums text-slate-800 dark:bg-slate-800 dark:text-slate-100">
               {total ? Math.round((c / total) * 100) : 0}%
             </span>
           </li>

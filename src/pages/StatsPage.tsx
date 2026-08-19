@@ -92,12 +92,16 @@ export default function StatsPage() {
             <section className="rounded-3xl border border-slate-200/70 bg-white/70 p-5 dark:border-slate-800 dark:bg-slate-900/60">
               <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">{t("stats_distribution")}</h2>
               <p className="mb-3 text-xs text-slate-400 dark:text-slate-500">{t("stats_dist_desc")}</p>
-              <ChartBars counts={stats.dist} />
+              <div className="sm:pb-1">
+                <ChartBars counts={stats.dist} />
+              </div>
             </section>
             <section className="rounded-3xl border border-slate-200/70 bg-white/70 p-5 dark:border-slate-800 dark:bg-slate-900/60">
               <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">{t("stats_weekday")}</h2>
               <p className="mb-3 text-xs text-slate-400 dark:text-slate-500">{t("stats_weekday_desc")}</p>
-              <ChartWeekday averages={stats.wd} />
+              <div className="sm:pb-1">
+                <ChartWeekday averages={stats.wd} />
+              </div>
               {stats.bestWd !== -1 && (
                 <p className="mt-3 text-xs font-medium text-slate-500 dark:text-slate-400">
                   {t("stats_weekday_insight", { day: weekdayShort(stats.bestWd, lang) })}

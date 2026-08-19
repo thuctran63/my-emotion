@@ -11,7 +11,7 @@ export default function ChartWeekday({ averages }: Props) {
   const { lang } = useI18n();
   const max = Math.max(...averages.filter((v): v is number => v !== null), 5);
   return (
-    <div className="flex h-40 items-end gap-2 sm:gap-3" role="img" aria-label="Average mood by weekday">
+    <div className="flex h-40 min-w-0 items-end gap-1.5 sm:gap-3" role="img" aria-label="Average mood by weekday">
       {averages.map((avg, i) => {
         const h = avg === null ? 0 : (avg / max) * 100;
         return (
